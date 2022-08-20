@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Google Keep note responsive</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+  </script>
+  
+  <style>
+div.example {
+width:300px;
+}
+
+@media only screen and (max-width: 984px) {
+  .example {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .example1 {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1020px) {
+  .example3 {
+    display: block;
+  }
+}
+
+span:hover{
+  background-color: #ffd700;
+  background-blend-mode: lighten;
+}
+</style>
+
+<style>
+.note{
+  border-radius: 10px;
+  border-width:1px;
+  border-color:grey;
+  border-style:solid;
+  background-color: white;
+  width: 600px;
+  align-content: center;
+  align: center;
+  box-shadow: 3px 3px 5px 1px #D3D3D3;
+
+}
+.part1{
+  width: 600px;
+  height: 40px;
+  border: none;
+
+}
+.part2{
+  width: 600px;
+  height: 50px;
+  border: none;
+
+}
+.part3{
+width: 600px;
+  height: 40px;
+  border: none;
+}
+.textarea:focus, input:focus{
+    outline: none;
+}
+.input{
+  width: 250px;
+  height: 50px;
+}
+.table{
+  border: 1px;
+  padding: 5px;
+  border-radius: 20px;
+  border-width:1px;
+  border-color:grey;
+  
+  background-color: white;
+  box-shadow: 3px 3px 5px 1px #D3D3D3;
+}
+</style>
+
+
+
+<script>
+        let notes = [];//create a blank array
+        let updatingNote = {};//blank object in js...
+        class Note{
+            constructor(title, content){
+                this.title = title;
+                this.content = content;
+            } 
+        }
+
+        function onClick() {
+            if(localStorage.getItem("myNotes") != undefined){
+                let jsonData = localStorage.getItem("myNotes");
+                notes = JSON.parse(jsonData);      
+            }
+            let title = document.getElementById("txtTitle").value;
+            let content = document.getElementById("txtContent").value;
+            let note = new Note(title, content);
+            notes.push(note);
+            localStorage.setItem("myNotes", JSON.stringify(notes));
+        }
+        function onUpdate(){
+            //get the values to update..
+            const title = document.getElementById("txtTitle").value;
+            const content = document.getElementById("txtContent").value;
+            //find the note U want to update.
+            if(updatingNote.title == undefined){
+                alert("Update is not possible");
+                return;
+            }
+            let foundNote = notes.find((n) =>n.title === updatingNote.title);
+            //Make the update
+            foundNote.title = document.getElementById("txtTitle").value;
+            foundNote.content = document.getElementById("txtContent").value;
+            //Save it back to the local storage
+            localStorage.setItem("myNotes", JSON.stringify(notes)); 
+            updatingNote = {};
+        }
+        function getDetails(title, content){
+
+            updatingNote = new Note(title, content)
+            document.getElementById("txtTitle").value = title;
+            document.getElementById("txtContent").value = content;
+        }
+
+        function loadData() {
+            if(localStorage.getItem("myNotes") != undefined){
+                //get the stored data...
+                let jsonData = localStorage.getItem("myNotes");
+                notes = JSON.parse(jsonData);
+                let tbl = document.getElementById("tblNotes");    
+                for (const note of notes) {
+                    const row = `<tr><td>${note.title}</td></tr><tr><td>${note.content}</td><td><a href="#" style="align-self:center;justify-self:center;text-decoration:none;color:black;" onclick="getDetails('${note.title}', '${note.content}')">Edit</td></tr>`
+                    tbl.innerHTML += row;
+                }   
+            }
+        }
+        window.addEventListener("load", loadData);//handling UR load event of the Document
+    </script>
+  
+
+<script>
+function myFunction() {
+  var x = document.getElementById("part1");
+  var y = document.getElementById("part3");
+  
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+  if (y.style.display === "none") {
+    y.style.display = "block";
+  } else {
+    y.style.display = "none";
+  }
+}
+
+function closeparts(){
+  document.getElementById("part1").style.display="none";
+  var v=document.getElementById("part2").style.display="block";
+  var w=document.getElementById("part3").style.display="none";
+}
+</script>
+
+
+
+
+</head>
+
+
+<body>
+
+
+
+
+  
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-5">
+      <a href="" style="color:black"><span class="material-symbols-outlined" style="padding: 0px 20px 10px 0px; align:left;">menu</span></a>
+
+    <a href=""><span style="padding: 0px 20px 0px 0px;"><img src="keep.png" width="40px" height="40px" ></span></a>
+    <a href="" style="color:black;text-decoration: none;" ><span style="padding: 0px 0px 0px 0px;">Keep</span></a>
+    </div>
+    <div class="col-sm-4 example">
+       <form action="/action_page.php">
+        <input type="text" placeholder="Search.." name="search" id="search" style="width:300px;">
+        </form>
+    </div>
+    <div class="col-sm-3 example1">
+      <a href="#"><span style="color:black;padding: 0px 0px 0px 0px;" class="material-symbols-outlined"   >grid_view</span></a>
+      <a href="#"><span style="color:black" class="material-symbols-outlined">settings</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-3 p-3">
+        <nav>
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a href="#" class="w3-bar-item w3-button"><span class="material-symbols-outlined" style="color:black ; padding: 10px 10px 10px 0px;" onclick="openNav()">lightbulb</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="w3-bar-item w3-button"><span class="material-symbols-outlined" style="color:black ;padding: 10px 10px 10px 0px;" onclick="openNav()">notifications</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="w3-bar-item w3-button"><span class="material-symbols-outlined" style="color:black ;padding: 10px 10px 10px 0px;" onclick="openNav()">edit</span></a>
+      </li>
+     <li class="nav-item">
+        <a href="#" class="w3-bar-item w3-button"><span class="material-symbols-outlined" style="color:black ;padding: 10px 10px 10px 0px;" onclick="openNav()">archive</span></a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="w3-bar-item w3-button"><span class="material-symbols-outlined" style="color:black ;padding: 10px 10px 10px 0px;" onclick="openNav()">delete</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+      </div>
+      <div class="col-9 p-3">
+        <div class="note" >
+<div class="part1" id="part1" style="display:none;">
+<input class="input-field" type="text" placeholder="Title" id="txtTitle" name="title" style="border:none;width:550px;height:40px;font-size: 20px;background: transparent; ">
+<span class="material-symbols-outlined" style="align:right">push_pin</span>
+</div>
+<button style="background: transparent;width:600px;border:none" onclick="myFunction()"  >
+<div class="part2" id="part2">
+<div class="input-container" style="border:none">
+<input class="input-field" type="text" placeholder="Take a note..." id="txtContent" id="inputar" style="width:350px;height:50px;align:left;border:none;background: transparent;font-size: 20px;">
+    <span class="material-symbols-outlined" style="width:50px;height:50px">check_box</span>
+    <span class="material-symbols-outlined" style="width:50px;height:50px">brush</span>
+    <span class="material-symbols-outlined"style="width:50px;height:50px">photo</span> 
+</div>
+</div>
+</button>
+<div class="part3" id="part3" style="display:none;">
+<span class="material-symbols-outlined" class="icon1"style="padding:10px;" onclick="onUpdate()">sync</span>
+<span class="material-symbols-outlined"class="icon1" style="padding:10px;">image</span>
+<span class="material-symbols-outlined"class="icon1" style="padding:10px;">archive</span>
+<span class="material-symbols-outlined"class="icon1" style="padding:10px;">more_vert</span>
+<span class="material-symbols-outlined"class="icon1" style="padding:10px;">undo</span>
+<span class="material-symbols-outlined"class="icon1" style="padding:10px;">redo</span>
+
+<span class="material-symbols-outlined" style="padding:15px 15px;float:left;"onclick="onClick()">add</span>
+<span style="padding:15px 15px;font-size:20px;font-color: black;float:right;font-family: Lato, sans-serif" onclick="closeparts()">Close</span>
+
+</div>
+
+  </div>
+
+<div>
+  <br><br><br>
+        <table id="tblNotes" class="table table-hover table-responsive" style="padding:15px 15px;width:60%;">       
+        </table>
+    </div>
+
+
+</div>
+
+          </div>
+  </div>
+</div>
+
+
+
+</body>
+</html>
